@@ -75,11 +75,10 @@ body {
 .selector{
     margin: 5vh;
 }
-    .selector button {
+    .selector{
         background: linear-gradient(to bottom, #ffd93e 0%, #f7cc29 100%);
         border: 1px solid #c9a50d;
         border-radius: 3px;
         padding: 10px 13px;
         font-size: 18px;
-        width: 200px;
     }
