@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Label Studio";
+}
+@model UniversalDataToolViewModel
+
+<script type="application/javascript" src="https://unpkg.com/universal-data-tool@0.13.2/vanilla.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<div class="text-center">
+    <h1 class="display-4">Universal Data Tool</h1>
+
+    <div class="addLabels">
+        <form>
+            <div class="row">
+                <div class="col-lg-3">
+                    <h6>Välj format:</h6>
+                    <input type="radio" id="text" name="source" value="text" checked>
+                    <label for="text">Text</label><br>
+                    <input type="radio" id="picture" name="source" value="picture">
+                    <label for="picture">Bild</label>
+                    <br />
+                </div>
+                <div class="col-lg-3">
+                    <h6>Väl sätt att annotera:</h6>
+                    <input type="radio" id="classification" name="type" value="classification" checked>
+                    <label for="classification">Klassificering</label><br>
+                    <input type="radio" id="label" name="type" value="label">
+                    <label for="label">Tagga</label>
+                    <br />
+                </div>
+                <div class="col-lg-6">
+                    <h6>Skriv ord att annotera efter:</h6>
+                    <div id="inputFormRow">
+                        <div class="input-group mb-3">
+                            <input id="addedLabel" type="text" name="title[]" class="form-control m-input" placeholder="Lägg till ord" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div id="newRow"></div>
+                    <button id="addRow" type="button" class="btn btn-info">Ny rad</button>                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="selector">        
+        <button onclick="loadUdt()">Skapa projekt</button>
+    </div>
+
+    <div id="udt"></div>
+
+</div>
+
+
+<script src="~/js/UniversalDataTool.js"></script>
+<script>
+    $("#addRow").click(function () {
+        var html = '';
+        html += '<div id="inputFormRow">';
+        html += '<div class="input-group mb-3">';
+        html += '<input id="addedLabel" type="text" name="title[]" class="form-control m-input" placeholder="Lägg till ord" autocomplete="off">';
+        html += '<div class="input-group-append">';
+        html += '<button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-x-lg"></i></button>';
+        html += '</div>';
+        html += '</div>';
+
+        $('#newRow').append(html);
+    });
+
+    // remove row
+    $(document).on('click', '#removeRow', function () {
+        $(this).closest('#inputFormRow').remove();
+    });
+</script>

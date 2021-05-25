@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Label Studio";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Label Studio</h1>
+    <div class="selector">
+        <button onclick="loadPicture()">Picture</button>
+        <button onclick="loadText()">Text</button>
+        <button onclick="loadPredictions()">Prediction</button>
+    </div>
+
+    
+
+    
+
+    <div id="label-studio"></div>
+
+    <button onclick="submitAnnotation()" class="ant-btn ant-btn-primary undefined ls-submit-btn">Hejhopp</button>
+
+</div>
+
+
+<script src="~/js/LabelStudio.js" asp-append-version="true"></script>
