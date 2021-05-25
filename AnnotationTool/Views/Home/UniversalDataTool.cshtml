@@ -10,40 +10,45 @@
     <h1 class="display-4">Universal Data Tool</h1>
 
     <div class="addLabels">
-        <form>
-            <div class="row">
-                <div class="col-lg-3">
-                    <h6>Välj format:</h6>
-                    <input type="radio" id="text" name="source" value="text" checked>
-                    <label for="text">Text</label><br>
-                    <input type="radio" id="picture" name="source" value="picture">
-                    <label for="picture">Bild</label>
-                    <br />
-                </div>
-                <div class="col-lg-3">
-                    <h6>Väl sätt att annotera:</h6>
-                    <input type="radio" id="classification" name="type" value="classification" checked>
-                    <label for="classification">Klassificering</label><br>
-                    <input type="radio" id="label" name="type" value="label">
-                    <label for="label">Tagga</label>
-                    <br />
-                </div>
-                <div class="col-lg-6">
-                    <h6>Skriv ord att annotera efter:</h6>
-                    <div id="inputFormRow">
-                        <div class="input-group mb-3">
-                            <input id="addedLabel" type="text" name="title[]" class="form-control m-input" placeholder="Lägg till ord" autocomplete="off">
-                        </div>
-                    </div>
 
-                    <div id="newRow"></div>
-                    <button id="addRow" type="button" class="btn btn-info">Ny rad</button>                    
-                </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h6>Välj format:</h6>
+                <input type="radio" id="text" name="source" value="text" checked>
+                <label for="text">Text</label><br>
+                <input type="radio" id="picture" name="source" value="picture">
+                <label for="picture">Bild</label>
+                <br />
             </div>
-        </form>
-    </div>
-    <div class="selector">        
-        <button onclick="loadUdt()">Skapa projekt</button>
+            <div class="col-lg-2">
+                <h6>Väl sätt att annotera:</h6>
+                <input type="radio" id="classification" name="type" value="classification" checked>
+                <label for="classification">Klassificering</label><br>
+                <input type="radio" id="label" name="type" value="label">
+                <label for="label">Tagga</label>
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <h6>Skriv ord att annotera efter:</h6>
+                <div id="inputFormRow">
+                    <div class="input-group mb-3">
+                        <input id="addedLabel" type="text" name="title[]" class="form-control m-input" placeholder="Lägg till ord" autocomplete="off">
+                    </div>
+                </div>
+
+                <div id="newRow"></div>
+                <button id="addRow" type="button" class="btn btn-info">Ny rad</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="selector col-lg-3">
+                <button onclick="loadUdt()">Skapa projekt</button>
+            </div>
+
+        </div>
+
     </div>
 
     <div id="udt"></div>
