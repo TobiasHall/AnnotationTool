@@ -1,34 +1,43 @@
 ﻿let samples = []
 
-function setSamples(type) {
-    if (type === "text_classification" || type === "text_entity_recognition") {
-        samples = [
-            {
-                document: "Apple Inc., i vardagslag benämnt Apple, är ett amerikanskt dator- och hemelektronikföretag grundat 1976 av Steve Jobs, Steve Wozniak och Ronald Wayne. Företaget har cirka 147 000 anställda och omsatte 2020 nästan 274.52 miljarder amerikanska dollar.",
-                annotation: []
-            },
-            {
-                document: "Google LLC är ett amerikanskt multinationellt internetföretag inriktat på Internetrelaterade produkter och tjänster som omfattar annonsering på nätet, en sökmotor, molntjänster, mjukvaru- och hårdvaruprodukter. Google grundades 4 september 1998 av Larry Page och Sergey Brin när de båda var doktorander på Stanford University i Kalifornien.",
-                annotation: []
-            },
-            {
-                document: "amsunggruppen är Sydkoreas största chaebol och en av världens största företagsgrupperingar. Själva Samsung grundades 1938 av Lee Byung-chul (företaget ägnade sig från början åt livsmedelshandel och produktion av nudlar), och högkvarteret ligger i Seocho Samsung Town i Seoul, Sydkorea. Företagets VD och styrelseordförande är Lee Kun-hee.",
-                annotation: []
-            }
-        ]
-    } else {
-        samples = [
-            {
-                imageUrl: "https://media.gettyimages.com/photos/dog-and-cat-picture-id151350785"
-            },
-            {
-                imageUrl: "https://media.gettyimages.com/photos/guess-who-rules-the-roost-in-that-house-picture-id500927195"
-            },
-            {
-                imageUrl: "https://media.gettyimages.com/photos/she-simply-loves-animals-picture-id499806311"
-            }
-        ]
-    }
+//function setSamples(type) {
+//    if (type.includes('text')) {
+//        samples = [
+//            {
+//                document: "Apple Inc., i vardagslag benämnt Apple, är ett amerikanskt dator- och hemelektronikföretag grundat 1976 av Steve Jobs, Steve Wozniak och Ronald Wayne. Företaget har cirka 147 000 anställda och omsatte 2020 nästan 274.52 miljarder amerikanska dollar.",
+//                annotation: []
+//            },
+//            {
+//                document: "Google LLC är ett amerikanskt multinationellt internetföretag inriktat på Internetrelaterade produkter och tjänster som omfattar annonsering på nätet, en sökmotor, molntjänster, mjukvaru- och hårdvaruprodukter. Google grundades 4 september 1998 av Larry Page och Sergey Brin när de båda var doktorander på Stanford University i Kalifornien.",
+//                annotation: []
+//            },
+//            {
+//                document: "Samsunggruppen är Sydkoreas största chaebol och en av världens största företagsgrupperingar. Själva Samsung grundades 1938 av Lee Byung-chul (företaget ägnade sig från början åt livsmedelshandel och produktion av nudlar), och högkvarteret ligger i Seocho Samsung Town i Seoul, Sydkorea. Företagets VD och styrelseordförande är Lee Kun-hee.",
+//                annotation: []
+//            }
+//        ]
+//    } else {
+//        samples = [
+//            {
+//                imageUrl: "https://media.gettyimages.com/photos/dog-and-cat-picture-id151350785"
+//            },
+//            {
+//                imageUrl: "https://media.gettyimages.com/photos/guess-who-rules-the-roost-in-that-house-picture-id500927195"
+//            },
+//            {
+//                imageUrl: "https://media.gettyimages.com/photos/she-simply-loves-animals-picture-id499806311"
+//            }
+//        ]
+//    }
+//}
+function loadSampels(uploadedText) {
+    uploadedText.forEach(function (element) {
+        let temp = {
+            document: element,
+            annotation: []
+        }
+        samples.push(temp)
+    })
 }
 
 
@@ -38,10 +47,10 @@ function getLabels() {
     let labels = []
     allTextInputs.forEach(function (el) {
         if (!!el.value) {
-            labels.push({id: el.value})
+            labels.push({ id: el.value })
         }
     })
-    
+
     return labels
 }
 
@@ -63,26 +72,22 @@ function getAnnotationType() {
     return returnType
 }
 
-function getInterface() {
-    
+
+function loadUdt() {
+
     const interface =
     {
         type: getAnnotationType(),
         labels: getLabels()
-    }    
-
-    return interface
-}
-
-function loadUdt() {
-
-    const interface = getInterface()
-    setSamples(interface.type)
+    }
+    /*setSamples(interface.type)*/
+    
 
     window.UniversalDataTool.open({
         container: document.getElementById("udt"),
 
         udt: {
+            namn: document.getElementById('project-name').value,
             interface: interface,
             samples: samples
         },
@@ -97,245 +102,85 @@ function loadUdt() {
 }
 
 
+//Adds row dynamical
+$("#addRow").click(function () {
+    var html = '';
+    html += '<div id="inputFormRow">';
+    html += '<div class="input-group mb-3">';
+    html += '<input id="addedLabel" type="text" name="title[]" class="form-control m-input" placeholder="Skapa kategorier" autocomplete="off">';
+    html += '<div class="input-group-append">';
+    html += '<button id="removeRow" type="button" class="btn btn-danger"><i class="bi bi-x-lg"></i></button>';
+    html += '</div>';
+    html += '</div>';
+
+    $('#newRow').append(html);
+});
+
+// remove row
+$(document).on('click', '#removeRow', function () {
+    $(this).closest('#inputFormRow').remove();
+});
 
 
 
+function loadFileAsText() {
+    let fileToLoad = document.getElementById("fileToLoad").files[0];
 
+    let fileReader = new FileReader();
+    fileReader.onload = function (fileLoadedEvent) {
+        let textFromFileLoaded = fileLoadedEvent.target.result.split('\n')
+        textFromFileLoaded.forEach(function (element) {
+            let temp = {
+                document: element,
+                annotation: []
+            }
+            samples.push(temp)
+        })
+    };
 
-
-function loadPicture() {
-    window.UniversalDataTool.open({
-        container: document.getElementById("udt"),
-
-        // Your UDT dataset
-        // https://github.com/UniversalDataTool/udt-format
-        udt: {
-            interface: {
-                type: "image_classification",
-                labels: [
-                    {
-                        id: "cat",
-                        description: "Feline Mammal"
-                    },
-                    {
-                        id: "dog",
-                        description: "Canine Mammal"
-                    }
-                ],
-                multipleRegions: true,
-                minimumRegionSize: 0.01,
-                overlappingRegions: true,
-                regionMinAcceptableDifference: 0.1
-            },
-            samples: [
-                {
-                    imageUrl: "https://media.gettyimages.com/photos/dog-and-cat-picture-id151350785",
-                    //annotation: [
-                    //    {
-                    //        regionType: "bounding-box",
-                    //        id: "05310267439433325",
-                    //        centerX: 0.23655172413793105,
-                    //        centerY: 0.4405480875381518,
-                    //        width: 0.2524137931034483,
-                    //        height: 0.36241314371063055,
-                    //        classification: "valid",
-                    //        color: "#f44336"
-                    //    }
-                    //]
-                },
-                {
-                    imageUrl: "https://media.gettyimages.com/photos/guess-who-rules-the-roost-in-that-house-picture-id500927195"
-                },
-                {
-                    imageUrl: "https://media.gettyimages.com/photos/she-simply-loves-animals-picture-id499806311"
-                }
-            ]
-        },
-
-        // Called when sample is saved
-        onSaveSample: (index, sample, event) => {
-            console.log(index, sample);
-        }
-
-    });
+    fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
+function loadFileAsImages() {
+    let imagesToLoad = document.getElementById("imagesToLoad").files;
 
- 
-
-function loadText() {
-    window.UniversalDataTool.open({
-        container: document.getElementById("udt"),
-
-        // Your UDT dataset
-        // https://github.com/UniversalDataTool/udt-format
-        udt: {
-            interface: {
-                type: "text_entity_recognition", // or "named_entity_recognition"
-
-                description: "# MarkdownDescription", // optional
-                overlapAllowed: false, // optional
-
-                // You can also provide labels as a string, e.g. ["food", "hat"]
-                labels: [
-                    {
-                        id: "food",
-                        displayName: "Food", // optional
-                        description: "Edible item." // optional
-                    },
-                    {
-                        id: "hat",
-                        displayName: "Hat", // optional
-                        description: "Something worn on the head." // optional
-                    }
-                ]
-            },
-            samples: [
-                {
-                    document: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium optio, eaque rerum! Provident similique accusantium nemo autem.Veritatis obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit, tenetur error, harum nesciunt ipsum debitis quas aliquid."
-                }
-            ]
-
-        },
-
-        // Called when sample is saved
-        onSaveSample: (index, sample) => {
-            console.log(index, sample);
+    for (var i = 0; i < imagesToLoad.length; i++) {
+        let temp = {
+            imageUrl: URL.createObjectURL(imagesToLoad[i]),
         }
-    });
+        samples.push(temp)
+    }
 }
 
-function loadTextClassification() {
-    window.UniversalDataTool.open({
-        container: document.getElementById("udt"),
+function myFunction() {
+    let fileToUpload = document.getElementById("myFile").files;
+    samples = []
 
-        // Your UDT dataset
-        // https://github.com/UniversalDataTool/udt-format
-        udt: {
-            interface: {
-                type: "text_classification",
-                description: "# MarkdownDescription",
-                multiple: false,
-                labels: [
-                    {
-                        id: "gryffindor",
-                        displayName: "Gryffindor",
-                        description: "Daring, strong nerve and chivalry."
-                    },
-                    {
-                        id: "slytherin",
-                        displayName: "Slytherin",
-                        description: "Cunning and ambitious. Possibly dark wizard."
-                    }
-                ]
-            },
-            samples: [
-                // These are all different types of task data that are acceptable
-                {
-                    document: "Harry",
-                    annotation: "gryffindor"
-                },
-                {
-                    document: "Malfoy",
-                }
-            ]
-            
+    for (var i = 0; i < fileToUpload.length; i++) {
+        if (fileToUpload[i].type.includes('image')) {
 
-        },
-
-        // Called when sample is saved
-        onSaveSample: (index, sample) => {
-            console.log(index, sample);
-        },
-
-        onModifySample: (index, sample) => {
-            console.log(index, sample);
+            let temp = {
+                imageUrl: URL.createObjectURL(fileToUpload[i]),
+            }
+            samples.push(temp)
 
         }
-    });
-}
-
-
-function loadPredictions() {
-    window.UniversalDataTool.open({
-        container: document.getElementById("udt"),
-
-        // Your UDT dataset
-        // https://github.com/UniversalDataTool/udt-format
-        udt: {
-            interface: {
-                type: "text_entity_recognition", // or "named_entity_recognition"
-
-                description: "# MarkdownDescription", // optional
-                overlapAllowed: false, // optional
-
-                // You can also provide labels as a string, e.g. ["food", "hat"]
-                labels: [
-                    {
-                        id: "food",
-                        displayName: "Food", // optional
-                        description: "Edible item." // optional
-                    },
-                    {
-                        id: "hat",
-                        displayName: "Hat", // optional
-                        description: "Something worn on the head." // optional
+        else if (fileToUpload[i].type.includes('text') && fileToUpload.length === 1) {
+            let fileReader = new FileReader();
+            fileReader.onload = function (fileLoadedEvent) {
+                let textFromFileLoaded = fileLoadedEvent.target.result.split('\n')
+                textFromFileLoaded.forEach(function (element) {
+                    let temp = {
+                        document: element,
+                        annotation: []
                     }
-                ],
+                    samples.push(temp)
+                })
 
-                // Optional: The regex that captures a single word
-                wordSplitRegex: "[a-zA-ZÀ-ÿ]+"
-            },
-            samples: [
-                {
-                    document: "This text document is broken into selectable chunks.",
+            };
 
-                    // annotation can be undefined for new samples
-                    annotation: {
-                        entities: [
-                            {
-                                text: "text document",
-                                label: "hat",
-                                start: 5,
-                                end: 18
-                            },
-                            {
-                                text: "selectable chunks",
-                                label: "food",
-                                start: 34,
-                                end: 51
-                            }
-                        ]
-                    }
-                },
-                {
-                    document: "En annan text",
+            fileReader.readAsText(fileToUpload[i], "UTF-8");
 
-                    // annotation can be undefined for new samples
-                    annotation: {
-                        entities: [
-                            {
-                                text: "En",
-                                label: "hat",
-                                start: 0,
-                                end: 1
-                            },
-                            {
-                                text: "text",
-                                label: "food",
-                                start: 9,
-                                end: 12
-                            }
-                        ]
-                    }
-                }
-            ]
-
-        },
-
-        // Called when sample is saved
-        onSaveSample: (index, sample) => {
-            console.log(index, sample);
         }
-    });
+    }
 }
