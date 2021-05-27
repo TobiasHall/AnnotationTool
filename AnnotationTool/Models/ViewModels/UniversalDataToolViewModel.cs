@@ -8,20 +8,11 @@ namespace AnnotationTool.Models.ViewModels
 {
     public class UniversalDataToolViewModel
     {
-        public UdtInterface UdtInterface { get; set; }
-        public string JsonString { get; set; }
-        public string IntFace { get; set; }
-        public string JsonLabels { get; set; }
+        public List<UdtInterfaceModel> UdtInterfaces { get; set; }
 
-        public UniversalDataToolViewModel(UdtInterface udtInterface)
+        public UniversalDataToolViewModel(List<UdtInterfaceModel> interfaceModels)
         {
-            this.UdtInterface = udtInterface;
-            JsonString = JsonConvert.SerializeObject(new UdtInterface());
-
-            IntFace = "image_segmentation";
-            List<string> hejsan = new List<string>() { "Cat", "Dog" };
-            JsonLabels = JsonConvert.SerializeObject(hejsan);
-
+            UdtInterfaces = interfaceModels;
         }
     }
 }
