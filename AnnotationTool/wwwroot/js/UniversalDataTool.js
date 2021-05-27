@@ -30,18 +30,18 @@
 //        ]
 //    }
 //}
-function loadSampels(uploadedText) {
-    uploadedText.forEach(function (element) {
-        let temp = {
-            document: element,
-            annotation: []
-        }
-        samples.push(temp)
-    })
-}
+//function loadSampels(uploadedText) {
+//    uploadedText.forEach(function (element) {
+//        let temp = {
+//            document: element,
+//            annotation: []
+//        }
+//        samples.push(temp)
+//    })
+//}
 
 
-
+//Get the labels from inputfields
 function getLabels() {
     const allTextInputs = document.querySelectorAll('#addedLabel')
     let labels = []
@@ -54,41 +54,18 @@ function getLabels() {
     return labels
 }
 
-function getAnnotationType() {
-    const source = document.querySelector('input[name="source"]:checked').value
-    const type = document.querySelector('input[name="type"]:checked').value
-
-    let returnType = ""
-    if (source === "text" && type === "classification") {
-        returnType = "text_classification"
-    } else if (source === "text" && type === "label") {
-        returnType = "text_entity_recognition"
-    } else if (source === "picture" && type === "classification") {
-        returnType = "image_classification"
-    } else {
-        returnType = "image_segmentation"
-    }
-
-    return returnType
-}
-
-
-function loadUdt() {
-
-    const interface =
-    {
-        type: getAnnotationType(),
-        labels: getLabels()
-    }
-    /*setSamples(interface.type)*/
-    
+//Loads Universal Data Tool
+function loadUdt() {    
 
     window.UniversalDataTool.open({
         container: document.getElementById("udt"),
 
         udt: {
             namn: document.getElementById('project-name').value,
-            interface: interface,
+            interface: {
+                type: document.querySelector('input[name="rdoAnnotation"]:checked').value,
+                labels: getLabels()
+            },
             samples: samples
         },
 
@@ -123,36 +100,36 @@ $(document).on('click', '#removeRow', function () {
 
 
 
-function loadFileAsText() {
-    let fileToLoad = document.getElementById("fileToLoad").files[0];
+//function loadFileAsText() {
+//    let fileToLoad = document.getElementById("fileToLoad").files[0];
 
-    let fileReader = new FileReader();
-    fileReader.onload = function (fileLoadedEvent) {
-        let textFromFileLoaded = fileLoadedEvent.target.result.split('\n')
-        textFromFileLoaded.forEach(function (element) {
-            let temp = {
-                document: element,
-                annotation: []
-            }
-            samples.push(temp)
-        })
-    };
+//    let fileReader = new FileReader();
+//    fileReader.onload = function (fileLoadedEvent) {
+//        let textFromFileLoaded = fileLoadedEvent.target.result.split('\n')
+//        textFromFileLoaded.forEach(function (element) {
+//            let temp = {
+//                document: element,
+//                annotation: []
+//            }
+//            samples.push(temp)
+//        })
+//    };
 
-    fileReader.readAsText(fileToLoad, "UTF-8");
-}
+//    fileReader.readAsText(fileToLoad, "UTF-8");
+//}
 
-function loadFileAsImages() {
-    let imagesToLoad = document.getElementById("imagesToLoad").files;
+//function loadFileAsImages() {
+//    let imagesToLoad = document.getElementById("imagesToLoad").files;
 
-    for (var i = 0; i < imagesToLoad.length; i++) {
-        let temp = {
-            imageUrl: URL.createObjectURL(imagesToLoad[i]),
-        }
-        samples.push(temp)
-    }
-}
+//    for (var i = 0; i < imagesToLoad.length; i++) {
+//        let temp = {
+//            imageUrl: URL.createObjectURL(imagesToLoad[i]),
+//        }
+//        samples.push(temp)
+//    }
+//}
 
-function myFunction() {
+function uploadFiles() {
     let fileToUpload = document.getElementById("myFile").files;
     samples = []
 
@@ -181,6 +158,10 @@ function myFunction() {
 
             fileReader.readAsText(fileToUpload[i], "UTF-8");
 
+        }
+        else {
+            window.alert('Välj endast en textfil eller flera bilder')
+            break
         }
     }
 }

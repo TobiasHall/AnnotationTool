@@ -17,34 +17,45 @@
                 <div class="col-12">
                     @*<h6>Namn för projekt:</h6>*@
                     <input id="project-name" type="text" class="form-control m-input" placeholder="Projektets namn" autocomplete="off" />
+                    
                 </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 radio-toolbar">
+                    @*<h6>Välj format:</h6>
+                <input type="radio" id="text" name="source" value="text" checked>
+                <label for="text">Text</label><br>
+                <input type="radio" id="picture" name="source" value="picture">
+                <label for="picture">Bild</label>*@
+                    <input type="radio" id="text_classification" name="rdoAnnotation" value="text_classification" checked>
+                    <label for="text_classification">Klassificera text</label>
+
+                    <input type="radio" id="text_entity_recognition" name="rdoAnnotation" value="text_entity_recognition">
+                    <label for="text_entity_recognition">Tagga text</label>
+                    <br />
+                </div>
+                <div class="col-lg-4 radio-toolbar">
+                    @*<h6>Annoteringssätt:</h6>
+                <input type="radio" id="classification" name="type" value="classification" checked>
+                <label for="classification">Klassificera</label><br>
+                <input type="radio" id="label" name="type" value="label">
+                <label for="label">Tagga</label>*@
+                    <input type="radio" id="image_classification" name="rdoAnnotation" value="image_classification">
+                    <label for="image_classification">Klassificera bild</label>
+
+                    <input type="radio" id="image_segmentation" name="rdoAnnotation" value="image_segmentation">
+                    <label for="image_segmentation">Tagga bild</label>
+                    <br />
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-12">
-
-                    <h6>Select a File to Load:</h6>
-                    <input type="file" id="fileToLoad" accept="text/plain" onchange="loadFileAsText()" />
-                    <input type="file" id="imagesToLoad" multiple accept="image/*" onchange="loadFileAsImages()" />
-
-
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <h6>Välj format:</h6>
-                    <input type="radio" id="text" name="source" value="text" checked>
-                    <label for="text">Text</label><br>
-                    <input type="radio" id="picture" name="source" value="picture">
-                    <label for="picture">Bild</label>
+                    @*<input type="file" id="fileToLoad" accept="text/plain" onchange="loadFileAsText()" />
+        <input type="file" id="imagesToLoad" multiple accept="image/*" onchange="loadFileAsImages()" />*@                    
+                    <input type="file" id="myFile" multiple accept="image/*, text/plain" onchange="uploadFiles()">
                     <br />
-                </div>
-                <div class="col-lg-6">
-                    <h6>Annoteringssätt:</h6>
-                    <input type="radio" id="classification" name="type" value="classification" checked>
-                    <label for="classification">Klassificera</label><br>
-                    <input type="radio" id="label" name="type" value="label">
-                    <label for="label">Tagga</label>
                     <br />
                 </div>
             </div>
@@ -73,15 +84,6 @@
             <div id="udt"></div>
         </div>
     </div>
-
-    <p>
-        Please specify a file, or a set of files:<br>
-        <input type="file" id="myFile" multiple accept="image/*, text/plain" size="50" onchange="myFunction()">
-    </p>
-
-<textarea id="demo" style="width:400px;height:150px;"></textarea>
-
-
 </div>
 
 
