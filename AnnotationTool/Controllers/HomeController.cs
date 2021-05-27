@@ -30,9 +30,6 @@ namespace AnnotationTool.Controllers
         [Route("/")]
         public IActionResult UniversalDataTool()
         {
-            //UdtInterface udt = new UdtInterface();
-            //UniversalDataToolViewModel udtVM = new UniversalDataToolViewModel(udt);
-
             PostgreSqlRepository postgreSqlRepository = new PostgreSqlRepository();
             List<UdtInterfaceModel> udtInterfaces = postgreSqlRepository.GetInterfaces();
             UniversalDataToolViewModel udtVM = new UniversalDataToolViewModel(udtInterfaces);

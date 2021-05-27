@@ -12,11 +12,7 @@ namespace AnnotationTool.Repository
 {
     public class PostgreSqlRepository
     {
-        private string connString = "Server = localhost; Port=5433; Database=udt; User Id = postgres; Password=296582; Trust Server Certificate=true;";
-        public PostgreSqlRepository()
-        {
-            
-        }
+        private readonly string connString = "Server= localhost; Port=5433; Database=udt; User Id =postgres; Password=296582; Trust Server Certificate=true;";        
         
         public List<UdtInterfaceModel> GetInterfaces()
         {

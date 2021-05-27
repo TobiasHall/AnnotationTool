@@ -1,56 +1,17 @@
 ﻿let samples = []
 
-//function setSamples(type) {
-//    if (type.includes('text')) {
-//        samples = [
-//            {
-//                document: "Apple Inc., i vardagslag benämnt Apple, är ett amerikanskt dator- och hemelektronikföretag grundat 1976 av Steve Jobs, Steve Wozniak och Ronald Wayne. Företaget har cirka 147 000 anställda och omsatte 2020 nästan 274.52 miljarder amerikanska dollar.",
-//                annotation: []
-//            },
-//            {
-//                document: "Google LLC är ett amerikanskt multinationellt internetföretag inriktat på Internetrelaterade produkter och tjänster som omfattar annonsering på nätet, en sökmotor, molntjänster, mjukvaru- och hårdvaruprodukter. Google grundades 4 september 1998 av Larry Page och Sergey Brin när de båda var doktorander på Stanford University i Kalifornien.",
-//                annotation: []
-//            },
-//            {
-//                document: "Samsunggruppen är Sydkoreas största chaebol och en av världens största företagsgrupperingar. Själva Samsung grundades 1938 av Lee Byung-chul (företaget ägnade sig från början åt livsmedelshandel och produktion av nudlar), och högkvarteret ligger i Seocho Samsung Town i Seoul, Sydkorea. Företagets VD och styrelseordförande är Lee Kun-hee.",
-//                annotation: []
-//            }
-//        ]
-//    } else {
-//        samples = [
-//            {
-//                imageUrl: "https://media.gettyimages.com/photos/dog-and-cat-picture-id151350785"
-//            },
-//            {
-//                imageUrl: "https://media.gettyimages.com/photos/guess-who-rules-the-roost-in-that-house-picture-id500927195"
-//            },
-//            {
-//                imageUrl: "https://media.gettyimages.com/photos/she-simply-loves-animals-picture-id499806311"
-//            }
-//        ]
-//    }
-//}
-//function loadSampels(uploadedText) {
-//    uploadedText.forEach(function (element) {
-//        let temp = {
-//            document: element,
-//            annotation: []
-//        }
-//        samples.push(temp)
-//    })
-//}
-
-
 //Get the labels from inputfields
 function getLabels() {
     const allTextInputs = document.querySelectorAll('#addedLabel')
     let labels = []
     allTextInputs.forEach(function (el) {
         if (!!el.value) {
-            labels.push({ id: el.value })
+            labels.push({
+                id: el.value.toLowerCase(),
+                displayName: el.value
+            })
         }
     })
-
     return labels
 }
 
@@ -73,13 +34,45 @@ function loadUdt() {
         onSaveSample: (index, sample) => {
             samples[sample].annotation = index.annotation
             console.log(index, sample);
+
+            postToPostgreSql()
         }
 
-    });
+    });    
+}
+
+function postToPostgreSql() {
+    var pg = require('pg');
+    const pgp = require('pg-promise')(/* initialization options */);
+
+    const cn = {
+        host: 'localhost', // server name or IP address;
+        port: 5433,
+        database: 'udt',
+        user: 'postgre',
+        password: '296582'
+    };
+
+    // alternative:
+    // var cn = 'postgres://username:password@host:port/database';
+
+    const db = pgp(cn); // database instance;
+
+    // select and return a single user name from id:
+    db.one('SELECT name FROM users WHERE id = $1', [123])
+        .then(user => {
+            console.log(user.name); // print user name;
+        })
+        .catch(error => {
+            console.log(error); // print the error;
+        });
+
+// alternative - new ES7 syntax with 'await':
+// await db.one('SELECT name FROM users WHERE id = $1', [123]);
 }
 
 
-//Adds row dynamical
+//Adds new input for labels dynamical
 $("#addRow").click(function () {
     var html = '';
     html += '<div id="inputFormRow">';
@@ -93,42 +86,12 @@ $("#addRow").click(function () {
     $('#newRow').append(html);
 });
 
-// remove row
+// remove row from labels
 $(document).on('click', '#removeRow', function () {
     $(this).closest('#inputFormRow').remove();
 });
 
-
-
-//function loadFileAsText() {
-//    let fileToLoad = document.getElementById("fileToLoad").files[0];
-
-//    let fileReader = new FileReader();
-//    fileReader.onload = function (fileLoadedEvent) {
-//        let textFromFileLoaded = fileLoadedEvent.target.result.split('\n')
-//        textFromFileLoaded.forEach(function (element) {
-//            let temp = {
-//                document: element,
-//                annotation: []
-//            }
-//            samples.push(temp)
-//        })
-//    };
-
-//    fileReader.readAsText(fileToLoad, "UTF-8");
-//}
-
-//function loadFileAsImages() {
-//    let imagesToLoad = document.getElementById("imagesToLoad").files;
-
-//    for (var i = 0; i < imagesToLoad.length; i++) {
-//        let temp = {
-//            imageUrl: URL.createObjectURL(imagesToLoad[i]),
-//        }
-//        samples.push(temp)
-//    }
-//}
-
+//Upload files to browser
 function uploadFiles() {
     let fileToUpload = document.getElementById("myFile").files;
     samples = []
