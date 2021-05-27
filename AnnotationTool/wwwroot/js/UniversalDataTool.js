@@ -35,40 +35,32 @@ function loadUdt() {
             samples[sample].annotation = index.annotation
             console.log(index, sample);
 
-            postToPostgreSql()
+            //postToPostgreSql(index.annotation)
         }
 
     });    
 }
 
-function postToPostgreSql() {
-    var pg = require('pg');
+//https://github.com/vitaly-t/pg-promise
+//Can't get it to work.
+function postToPostgreSql(annotation) {
+    const initOptions = {/* options as documented below */ };
     const pgp = require('pg-promise')(/* initialization options */);
 
     const cn = {
-        host: 'localhost', // server name or IP address;
+        host: 'localhost',
         port: 5433,
         database: 'udt',
         user: 'postgre',
         password: '296582'
     };
 
-    // alternative:
-    // var cn = 'postgres://username:password@host:port/database';
-
-    const db = pgp(cn); // database instance;
-
-    // select and return a single user name from id:
-    db.one('SELECT name FROM users WHERE id = $1', [123])
-        .then(user => {
-            console.log(user.name); // print user name;
-        })
+    const db = pgp(cn);
+        
+    db.one(`'INSERT INTO annotation(json) VALUES(${annotation})'`)        
         .catch(error => {
-            console.log(error); // print the error;
+            console.log(error);
         });
-
-// alternative - new ES7 syntax with 'await':
-// await db.one('SELECT name FROM users WHERE id = $1', [123]);
 }
 
 
