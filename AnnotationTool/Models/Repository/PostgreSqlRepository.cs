@@ -12,32 +12,46 @@ namespace AnnotationTool.Repository
 {
     public class PostgreSqlRepository
     {
-        private readonly string connString = "Server= localhost; Port=5433; Database=udt; User Id =postgres; Password=296582; Trust Server Certificate=true;";        
+        private readonly string connString = "Server=localhost; Port=5433; Database=udt; User Id =postgres; Password=296582; Trust Server Certificate=true;";        
         
         public List<UdtInterfaceModel> GetInterfaces()
         {
-            List<UdtInterfaceModel> displayUdtInterface = new List<UdtInterfaceModel>();
-            using (NpgsqlConnection conn = new NpgsqlConnection(connString))
+            try
             {
-                conn.Open();
-                NpgsqlCommand comm = new NpgsqlCommand();
-                comm.Connection = conn;
-                comm.CommandType = CommandType.Text;
-                comm.CommandText = "SELECT * FROM interface ORDER BY id ASC";
-
-                NpgsqlDataReader sdr = comm.ExecuteReader();
-                while (sdr.Read())
+                string stmt = "SELECT * FROM interface ORDER BY id ASC";
+                using (var conn = new NpgsqlConnection(connString))
                 {
-                    var interfaceList = new UdtInterfaceModel();
-                    interfaceList.Id = Convert.ToInt32(sdr["id"]);
-                    interfaceList.Type = Convert.ToString(sdr["type"]);
-                    interfaceList.Name = Convert.ToString(sdr["name"]);
-                    displayUdtInterface.Add(interfaceList);
-                }
+                    UdtInterfaceModel udt = null;
+                    List<UdtInterfaceModel> udts = new List<UdtInterfaceModel>();
+                    conn.Open();
 
-                return displayUdtInterface;
+                    using (var command = new NpgsqlCommand(stmt, conn))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                udt = new UdtInterfaceModel
+                                {
+                                    Id = (int)reader["id"],
+                                    Type = (string)reader["type"],
+                                    Name = (string)reader["name"]
+                                };
+                                udts.Add(udt);
+                            }
+                        }
+                    }
+                    return udts;
+                }
+            }
+            catch (PostgresException)
+            {
+                throw;
             }
             
+
+
+
         }
     }
 }
