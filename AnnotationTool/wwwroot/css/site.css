@@ -75,7 +75,7 @@ body {
 .selector{
     margin: 5vh;
 }
-    .selector{
+    .selector button{
         background: linear-gradient(to bottom, #ffd93e 0%, #f7cc29 100%);
         border: 1px solid #c9a50d;
         border-radius: 3px;

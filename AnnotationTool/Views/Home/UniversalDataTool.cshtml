@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Label Studio";
+    ViewData["Title"] = "Universal Data Tool";
 }
 @model UniversalDataToolViewModel
 
@@ -14,16 +14,13 @@
     <div class="row">
         <div class="col-3">
             <div class="row">
-                <div class="col-12">
-                    @*<h6>Namn för projekt:</h6>*@
+                <div class="col-12">                    
                     <input id="project-name" type="text" class="form-control m-input" placeholder="Projektets namn" autocomplete="off" />
-
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-lg-12 radio-toolbar">
-
                     @foreach (var item in Model.UdtInterfaces)
                     {
                         <input type="radio" id="@item.Type" name="rdoAnnotation" value="@item.Type">
